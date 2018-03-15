@@ -1,0 +1,49 @@
+{
+    "estudiante": {
+        "estudiante_id": 1,
+        "age": 1,
+        "nombre": "",
+        "cedula": "",
+        "programa": "",
+        "constraints": {
+            "pk": "estudiante_id",
+            "fk": [{
+                "id": "",
+                "references": ""
+            }]
+        }
+    },
+    "profesor": {
+        "profesor_id": 1,
+        "age": 1,
+        "nombre": "",
+        "cedula": "",
+        "programa": "",
+        "constraints": {
+            "pk": "profesor_id",
+            "fk": [{
+                "id": "",
+                "references": ""
+            }]
+        }
+    },
+    "curso": {
+        "curso_id": 1,
+        "estudiante_id": 1,
+        "profesor_id": 1,
+        "codigo": "",
+        "nombre": "",
+        "constraints": {
+            "pk": "curso_id",
+            "fk": [{
+                    "id": "estudiante_id",
+                    "references": "estudiante"
+                },
+                {
+                    "id": "profesor_id",
+                    "references": "profesor"
+                }
+            ]
+        }
+    }
+}

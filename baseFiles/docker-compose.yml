@@ -1,0 +1,14 @@
+version: '2'  
+services:
+  app:
+    build: .
+    ports:
+      - "8000:80"
+    expose:
+      - "8000"
+    depends_on:
+      - app_db
+  app_db:
+    build: ./database
+    ports:
+      - "3306:3306"
