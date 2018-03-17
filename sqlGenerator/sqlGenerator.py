@@ -3,7 +3,7 @@ def generate_sql_file(structure):
     f.write(structure)
     f.close()
 
-def dict_parse(data, structure):
+def dict_parse(data, structure, table):
     for i in data:
         if type(data[i]) is int:
             structure += i+' INTEGER NOT NULL, '
@@ -17,6 +17,7 @@ def dict_parse(data, structure):
             structure += 'FOREIGN KEY (' + fk['id'] + ') REFERENCES ' + fk['references'] + '(' + fk['id'] + '), '
     structure = structure[:-2]
     structure += ');'
+    structure += '\nALTER TABLE '+ table +' MODIFY COLUMN '+ data['constraints']['pk'] +' INT NOT NULL AUTO_INCREMENT;'
     return structure
 
 def sqlParse(data):
@@ -24,7 +25,7 @@ def sqlParse(data):
     sql = ''
     for i in data:
         structure += ' '+i+' ('
-        structure = dict_parse(data[i], structure)
+        structure = dict_parse(data[i], structure, i)
         sql += structure + '\n'
         structure = 'CREATE TABLE'
     generate_sql_file(sql)

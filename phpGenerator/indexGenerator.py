@@ -7,7 +7,7 @@ base = """
     $query = '--QUERY--';
     $result = mysqli_query($conn, $query);
     echo '<table class="table table-striped">';
-    echo '<thead><tr><th></th><th>id</th><th>name</th><th>email</th>';
+    --TABLE--
     echo '</tr></thead>';
     if ($result->num_rows > 0) {
         // output data of each row
@@ -15,14 +15,16 @@ base = """
             echo "<tr>";
             --VARIABLES--	
         }
-    } else {
-        echo "0 results";
     }
+
     echo '</table>';
+    echo '<a href="add.html" class="btn btn-default btn-md btn-block" name="Submit">Add</a>';
     $conn->close();
     $result->close();
     mysqli_close($conn);
     ?>
+    </div>
+    </div>
     </div>
     </body>
     </html>
@@ -37,9 +39,12 @@ def indexGenerator(data):
         content = base.replace('--QUERY--', queryList[count])
         count += 1
         variableStructure =''
+        tableStructure = 'echo "<thead><tr>'
         for j in data[i]:
             if j != 'constraints':
+                tableStructure += '<th>'+ j.upper() +'</th>'
                 variableStructure += 'echo "<td>".$res['+ j +']."</td>";\n'
         content = content.replace('--VARIABLES--', variableStructure)
+        content = content.replace('--TABLE--', tableStructure+'";')
         f.write(content)
         f.close()

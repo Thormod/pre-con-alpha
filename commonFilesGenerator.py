@@ -20,14 +20,20 @@ def copyApacheConfig():
     shutil.copy(src, dstPath)
 
 def copyPhpBaseFiles():
-    src = srcPath + 'www/base.php'
+    src = srcPath + 'www/config.php'
     dst = dstPath + 'www/' 
     shutil.copy(src, dst)
-    src = srcPath + 'www/config.php'
-    shutil.copy(src, dst)
 
+def copyCssFiles():
+    src = srcPath + 'www/css/main.css'
+    dst = dstPath + 'www/css'
+    shutil.copy(src, dst)
+    src = srcPath + 'www/css/font-awesome.min.css'
+    shutil.copy(src, dst)
+    
 def copyCommonFiles():
     copyDatabaseDockerfile()
     copyDockerFiles()
     copyApacheConfig()
     copyPhpBaseFiles()
+    copyCssFiles()

@@ -12,6 +12,7 @@ def generateBasicStructure():
     createFolder('./generated_files/')
     createFolder('./generated_files/www/')
     createFolder('./generated_files/database/')
+    createFolder('./generated_files/www/css/')
 
 def generateDynamicStructure(data):
     for i in data:
