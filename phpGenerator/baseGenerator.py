@@ -1,7 +1,7 @@
 base = """
 <html>
 <head>
-<title>directory.add</title>
+<title>ADD</title>
 <meta charset="utf-8"> 
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link href="/css/main.css" rel="stylesheet">
