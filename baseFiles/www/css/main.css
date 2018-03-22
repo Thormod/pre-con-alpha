@@ -20,7 +20,7 @@ h2, label{
 
 form > h2{
 	text-align: center;
-	color: #ccc;
+	color: #000;
 }
 
 label{
@@ -38,18 +38,18 @@ label{
 	background-color: transparent;
 	border: none;
 	box-shadow: none;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #000;
 	border-radius: 0;
 }
 
 .form-control{
-	color: #ccc;
+	color: #000;
 }
 
 .form-control:hover,
 .form-control:active,
 .form-control:focus{
-	color: white;
+	color: black;
 }
 
 .btn-default {

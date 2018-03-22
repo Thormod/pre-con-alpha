@@ -36,15 +36,59 @@ base = """
 
 """
 
-def generateNav(data):
+indexBase = """
+<html>
+<head>
+	<title>INDEX</title>
+</head>
+
+<body>
+<?php
+//including the database connection file
+include_once("./base.php");
+?>
+</div>
+</body>
+</html>
+"""
+
+def generateDropdowns(dynamic_relationships):
+  dropdownStructure = ''
+  for i in dynamic_relationships:
+    dropdownStructure += '<li class="dropdown">'
+    dropdownStructure += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'+i.upper()+'<span class="caret"></span></a>'
+    dropdownStructure += '<ul class="dropdown-menu">'
+    for j in dynamic_relationships[i]:
+      if(dynamic_relationships[i][j]['type'] == 'add'):
+        dropdownStructure += '<li><a href="/'+dynamic_relationships[i][j]['class']+'/'+j+'.html">'+j+'</a></li>'
+      else:
+        dropdownStructure += '<li><a href="/'+dynamic_relationships[i][j]['class'].split('.')[0]+'/'+j+'.php">'+j+'</a></li>'
+    dropdownStructure += '</ul>'    
+    dropdownStructure += '</li>'
+  return dropdownStructure
+
+def generateNavs(class_concepts):
   navsStructure = ''
-  for i in data:
+  for i in class_concepts:
         navsStructure += '<li><a href="/'+i+'/index.php">'+i.upper()+'</a></li>'
   return navsStructure
+
+def generateNavbar(data):
+  navbarStructure = ''
+  navbarStructure += generateDropdowns(data['dynamic_relationship'])
+  navbarStructure += generateNavs(data['concept_class'])
+  return navbarStructure
   
+def generateIndex():
+  filePath = './generated_files/www/index.php'
+  f = open(filePath,'w') 
+  f.write(indexBase)
+  f.close()  
+
 def generateBase(data):
-    filePath = './generated_files/www/base.php'
-    f = open(filePath,'w')    
-    content = base.replace('--NAVS--', generateNav(data))
-    f.write(content)
-    f.close()
+  filePath = './generated_files/www/base.php'
+  f = open(filePath,'w')    
+  content = base.replace('--NAVS--', generateNavbar(data))
+  f.write(content)
+  f.close()
+  generateIndex() 

@@ -1,49 +1,67 @@
 {
-    "estudiante": {
-        "estudiante_id": 1,
-        "age": 1,
-        "nombre": "",
-        "cedula": "",
-        "programa": "",
-        "constraints": {
-            "pk": "estudiante_id",
-            "fk": [{
-                "id": "",
-                "references": ""
-            }]
+    "concept_class": {
+        "employee": {
+            "employee_id": 1,
+            "phone": "",
+            "name": "",
+            "last_name": "",
+            "employee_ssn": "",
+            "selling_goal": 1.0,
+            "selling": 1.0,
+            "constraints": {
+                "pk": "employee_id",
+                "fk": [{
+                    "id": "",
+                    "references": ""
+                }]
+            }
+        },
+        "wage": {
+            "wage_id": 1,
+            "basis": 1.0,
+            "allowance": 1.0,
+            "payment": 1.0,
+            "employee_id": 1,
+            "constraints": {
+                "pk": "wage_id",
+                "fk": [{
+                    "id": "employee_id",
+                    "references": "employee"
+                }]
+            }
         }
     },
-    "profesor": {
-        "profesor_id": 1,
-        "age": 1,
-        "nombre": "",
-        "cedula": "",
-        "programa": "",
-        "constraints": {
-            "pk": "profesor_id",
-            "fk": [{
-                "id": "",
-                "references": ""
-            }]
-        }
-    },
-    "curso": {
-        "curso_id": 1,
-        "estudiante_id": 1,
-        "profesor_id": 1,
-        "codigo": "",
-        "nombre": "",
-        "constraints": {
-            "pk": "curso_id",
-            "fk": [{
-                    "id": "estudiante_id",
-                    "references": "estudiante"
-                },
-                {
-                    "id": "profesor_id",
-                    "references": "profesor"
+    "dynamic_relationship": {
+        "boss": {
+            "register_employee": {
+                "class": "employee",
+                "type": "add"
+            },
+            "register_wage": {
+                "class": "wage",
+                "type": "add"
+            },
+            "deliver_bonus": {
+                "class": "wage.allowance",
+                "type": "self",
+                "def": {
+                    "first_variable": "employee.selling_goal",
+                    "operation": "<=",
+                    "second_variable": "employee.selling"
                 }
-            ]
+            }
+        },
+        "comercial_director": {
+            "assign_selling_goal": {
+                "class": "employee.selling_goal",
+                "type": "edit"
+            }
+        },
+        "employee": {
+            "register_selling": {
+                "class": "employee.selling",
+                "type": "edit"
+            }
         }
     }
 }

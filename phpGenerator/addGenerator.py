@@ -1,4 +1,4 @@
-from phpGenerator.baseGenerator import generateNav
+from phpGenerator.baseGenerator import generateNavbar
 from sqlGenerator.queryGenerator import queryGenerator
 
 baseHtml = """
@@ -36,9 +36,9 @@ baseHtml = """
 	<div class="row">
 	<div class="col-xs-6 col-xs-offset-3">
 	<div class="well">
-	<form action="add.php" method="post" name="form1" role="form">
+	--FORM--
 		--VARIABLES--
-		<button type="submit" class="btn btn-default btn-md btn-block" name="Submit">Add</button>
+		--BUTTON--
 	</form>
 	</div>
 	</div>
@@ -84,43 +84,45 @@ if(isset($_POST['Submit'])) {
 """
 
 
-def addHtmlGenerator(data):
-    for i in data:
-        primaryKey = data[i]['constraints']['pk']		
-        filePath = './generated_files/www/'+i+'/add.html'
-        f = open(filePath,'w')
-        submitStructure = ''
-        for j in data[i]:
-            if j != 'constraints' and j != primaryKey:
-                submitStructure +='<div class="form-group"><label>'+j.upper()+'</label><input class="form-control" type="text" name="'+j+'"></div>'
-        content = baseHtml.replace('--VARIABLES--', submitStructure)
-        content = content.replace('--NAVS--', generateNav(data))
-        f.write(content)
-        f.close()
+def addHtmlGenerator(data, conceptClass, dynamicRelationshipName):
+	targetClass = data['concept_class'][conceptClass]
+	primaryKey = targetClass['constraints']['pk']		
+	filePath = './generated_files/www/'+conceptClass+'/'+dynamicRelationshipName+'.html'
+	f = open(filePath,'w')
+	submitStructure = ''
+	formStructure = '<form action="'+dynamicRelationshipName+'.php" method="post" name="form1" role="form">'
+	buttonStructure = '<button type="submit" class="btn btn-default btn-md btn-block" name="Submit">'+dynamicRelationshipName+'</button>'
+	for j in targetClass:
+		if j != 'constraints' and j != primaryKey:
+			submitStructure +='<div class="form-group"><label>'+j.upper()+'</label><input class="form-control" type="text" name="'+j+'"></div>'
+	content = baseHtml.replace('--VARIABLES--', submitStructure)
+	content = content.replace('--NAVS--', generateNavbar(data))
+	content = content.replace('--FORM--', formStructure)
+	content = content.replace('--BUTTON--', buttonStructure)
+	f.write(content)
+	f.close()
 
-def addPhpGenerator(data):
-	queryList = queryGenerator(data, 'insert')
-	cont = 0
-	for i in data:
-		primaryKey = data[i]['constraints']['pk']
-		filePath = './generated_files/www/'+i+'/add.php'
-		f = open(filePath,'w')
-		variableStructure = ''
-		ifStatementStructure = ''
-		ifActionStructure = ''
-		for j in data[i]:
-			if j != 'constraints' and j != primaryKey:
-				ifStatementStructure += 'empty($'+j+') || '
-				variableStructure += "$"+j+" = $_POST['"+j+"'];\n"
-				ifActionStructure += 'if(empty($'+j+')) {echo "<font color='+"'red'"+'>'+j+' field is empty.</font><br/>";}\n'
-		content = basePhp.replace('--VARIABLES--', variableStructure)
-		content = content.replace('--IFSTATEMENT--', ifStatementStructure[:-4])
-		content = content.replace('--IFACTION--', ifActionStructure)
-		content = content.replace('--QUERY--', str(queryList[cont]))
-		f.write(content)
-		f.close()
-		cont += 1
+def addPhpGenerator(data, conceptClass, dynamicRelationshipName):
+	query = queryGenerator(data, 'insert', conceptClass, '')
+	targetClass = data['concept_class'][conceptClass]
+	primaryKey = targetClass['constraints']['pk']		
+	filePath = './generated_files/www/'+conceptClass+'/'+dynamicRelationshipName+'.php'
+	f = open(filePath,'w')
+	variableStructure = ''
+	ifStatementStructure = ''
+	ifActionStructure = ''
+	for j in targetClass:
+		if j != 'constraints' and j != primaryKey:
+			ifStatementStructure += 'empty($'+j+') || '
+			variableStructure += "$"+j+" = $_POST['"+j+"'];\n"
+			ifActionStructure += 'if(empty($'+j+')) {echo "<font color='+"'red'"+'>'+j+' field is empty.</font><br/>";}\n'
+	content = basePhp.replace('--VARIABLES--', variableStructure)
+	content = content.replace('--IFSTATEMENT--', ifStatementStructure[:-4])
+	content = content.replace('--IFACTION--', ifActionStructure)
+	content = content.replace('--QUERY--', query)
+	f.write(content)
+	f.close()
 
-def addGenerator(data):
-	addHtmlGenerator(data)
-	addPhpGenerator(data)
+def addGenerator(data, conceptClass, dynamicRelationshipName):
+	addHtmlGenerator(data, conceptClass, dynamicRelationshipName)
+	addPhpGenerator(data, conceptClass, dynamicRelationshipName)
