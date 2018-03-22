@@ -29,7 +29,7 @@ base = """
     """
 
 def indexGenerator(data):
-    queryList = queryGenerator(data, 'select-all', '', '')
+    queryList = queryGenerator(data, 'select-all', '', '', '')
     count = 0
     for i in data:
         filePath = './generated_files/www/'+i+'/index.php'

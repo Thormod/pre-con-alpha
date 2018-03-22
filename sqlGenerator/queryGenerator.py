@@ -30,6 +30,20 @@ def selectVariablesQuery(data, conceptClass, variables):
     content = content.replace('--NAME--', conceptClass)
     return content
 
+def selectVariablesWhereQuery(data, conceptClass, variables, condition):
+    queryStructure = 'SELECT --VARIABLES-- FROM --NAME-- WHERE --CONDITIONS--='  
+    # SELECT employee_id, name FROM employee 
+    variablesStructure = ''
+    conditionStructure = ''
+    for i in variables:
+        variablesStructure += i+', '
+    for i in condition:
+        conditionStructure += i
+    content = queryStructure.replace('--VARIABLES--', variablesStructure[:-2])
+    content = content.replace('--CONDITIONS--', conditionStructure)
+    content = content.replace('--NAME--', conceptClass)
+    return content
+
 def selectWhereQuery(data, conceptClass, variables):
     queryStructure = 'SELECT * FROM --NAME-- WHERE --CONDITION--'  
     # SELECT employee_id, name FROM employee 
@@ -47,13 +61,15 @@ def updateQuery(data, conceptClass, variables):
     queryStructure = queryStructure.replace('--VARIABLESTRUCTURE--', variableStructure)
     return queryStructure
 
-def queryGenerator(data, queryType, conceptClass, variables):
+def queryGenerator(data, queryType, conceptClass, variables, condition):
     if queryType == 'select-all':
         return selectAllQuery(data)
     elif queryType == 'select-where':
         return selectWhereQuery(data, conceptClass, variables)
     elif queryType == 'select-variables':
         return selectVariablesQuery(data, conceptClass, variables)
+    elif queryType == 'select-variables-where':
+        return selectVariablesWhereQuery(data, conceptClass, variables, condition)
     elif queryType == 'insert':
         return insertQuery(data, conceptClass)
     elif queryType == 'update':

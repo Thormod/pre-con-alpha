@@ -19,7 +19,7 @@
         "wage": {
             "wage_id": 1,
             "basis": 1.0,
-            "allowance": 1.0,
+            "allowance": 1,
             "payment": 1.0,
             "employee_id": 1,
             "constraints": {
@@ -41,7 +41,7 @@
                 "class": "wage",
                 "type": "add"
             },
-            "deliver_bonus": {
+            "deliver_allowance": {
                 "class": "wage.allowance",
                 "type": "self",
                 "def": {

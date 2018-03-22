@@ -58,8 +58,8 @@ if(isset($_POST['sel1'])){
 def editBaseGenerator(data, conceptClass, dynamicRelationshipName, targetVariable):
     targetClass = data['concept_class'][conceptClass]
     primaryKey = targetClass['constraints']['pk']	
-    selectQuery = queryGenerator(data, 'select-variables', conceptClass, [primaryKey])
-    query = queryGenerator(data, 'select-variables', conceptClass, [targetVariable])
+    selectQuery = queryGenerator(data, 'select-variables', conceptClass, [primaryKey], '')
+    query = queryGenerator(data, 'select-variables', conceptClass, [targetVariable], '')
     filePath = './generated_files/www/'+conceptClass+'/'+dynamicRelationshipName+'.php'
     f = open(filePath,'w')
     content = base.replace('--SELECTQUERY--', selectQuery)
@@ -85,7 +85,7 @@ def editActionGenerator(data, conceptClass, dynamicRelationshipName, targetVaria
     variableStructure = "$"+targetVariable+"=$_POST['"+targetVariable+"'];"  
     content = content.replace('--VARIABLESTRUCTURE--', variableStructure)
     variableStructure = targetVariable+"='$"+targetVariable+"'"
-    content = content.replace('--QUERY--', queryGenerator(data, 'update', conceptClass, [targetVariable]))
+    content = content.replace('--QUERY--', queryGenerator(data, 'update', conceptClass, [targetVariable],''))
     f.write(content)
     f.close()
 

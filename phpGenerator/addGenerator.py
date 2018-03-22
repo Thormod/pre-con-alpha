@@ -103,7 +103,7 @@ def addHtmlGenerator(data, conceptClass, dynamicRelationshipName):
 	f.close()
 
 def addPhpGenerator(data, conceptClass, dynamicRelationshipName):
-	query = queryGenerator(data, 'insert', conceptClass, '')
+	query = queryGenerator(data, 'insert', conceptClass, '', '')
 	targetClass = data['concept_class'][conceptClass]
 	primaryKey = targetClass['constraints']['pk']		
 	filePath = './generated_files/www/'+conceptClass+'/'+dynamicRelationshipName+'.php'
